@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <script src="js/jquery-1.10.0.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+
+    <style>
+        #graph {
+            border: 1px solid #87ceeb;
+            cursor: url(images/Pen.cur), auto;
+            float: left;
+        }
+
+        #userlist {
+            width: 200px;
+            height: 100%;
+            border: 1px solid #87ceeb;
+            float: left;
+            margin-left: 10px;;
+        }
+
+        #users {
+            width: 200px;
+        }
+    </style>
+</head>
+<body onselectstart="return false">
+<div id="drawCanvas">
+    <canvas id="graph" width="500" height="500">
+        您的浏览器不支持,请使用chrome、firefox浏览器
+    </canvas>
+</div>
+<div id="userlist">
+    <h2>用户列表</h2>
+    <select id="users" size=20>
+
+    </select>
+
+    <div id="messagebox"></div>
+</div>
+
+<script>
+    $(function () {
+        if (window.console == 'undefined') {
+            window.console.log = function () {
+            }
+        }
+        var addNameToList = function (name) {
+            var user = $("#users");
+            $("<option value='" + name + "'>" + name + "</option>").appendTo(user);
+        }
+        var socket = io.connect('http://192.168.122.82:3000/');
+
+        socket.on('connect', function () {
+            var name = Math.random() * 1000;
+            socket.emit('set nickname', name);
+            //addNameToList(name);
+
+        })
+        socket.on('add user', function (names) {
+            var user = $("#users");
+            user.html("");
+            $.each(names, function (item) {
+                var name = item;
+                $("<option value='" + name + "'>" + name + "</option>").appendTo(user);
+            })
+
+
+        });
+        socket.on('board cast', function (data) {
+            var canvas = document.getElementById('graph');
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = "#222";
+            ctx.strokeStyle = "#37a";
+            ctx.lineWidth = 5;
+            ctx.lineJoin = "round";
+            var ex, ey, e = data;
+            if (e.sx && e.sy) {
+                ex = e.sx;
+                ey = e.sy;
+                ctx.moveTo(ex, ey);
+            }
+            if (e.ex && e.ey) {
+                ctx.moveTo(ex, ey);
+                ctx.lineTo(e.ex, e.ey);
+                ctx.stroke();
+            }
+        });
+
+        var canvas = document.getElementById('graph');
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#222";
+        ctx.strokeStyle = "#37a";
+        ctx.lineWidth = 5;
+        ctx.lineJoin = "round";
+        var begin = false;
+        $("#graph").on("mousedown", function (e) {
+            begin = true;
+            ctx.moveTo(e.offsetX, e.offsetY);
+            socket.emit('draw', { sx:e.offsetX, sy:e.offsetY });
+        });
+        $("#graph").on("mousemove", function (e) {
+            if (begin) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                socket.emit('draw', { ex:e.offsetX, ey:e.offsetY });
+            }
+        });
+        $("#graph").on("mouseup", function (e) {
+            begin = false;
+        });
+    });
+
+</script>
+</body>
+</html>
