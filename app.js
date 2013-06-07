@@ -38,7 +38,7 @@ server.listen(app.get('port'), function () {
 });
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('board cast', { hello: 'world' });
+    socket.emit('board cast', { hello:'world' });
     socket.on('draw', function (data) {
         console.log(data);
         socket.broadcast.emit('board cast', data);
@@ -47,9 +47,12 @@ io.sockets.on('connection', function (socket) {
         socket.set('nickname', name, function () {
 
             //socket.broadcast.emit('add user',socket.manager.roomClients);
-            socket.emit('add user',socket.manager.roomClients);
-            socket.broadcast.emit('add user',socket.manager.roomClients);
+            socket.emit('add user', socket.manager.roomClients);
+            socket.broadcast.emit('add user', socket.manager.roomClients);
             //console.log(socket);
         });
+    });
+    socket.on("msg", function(data){
+        socket.broadcast.emit("msg",socket.name+"说："+data);
     });
 });

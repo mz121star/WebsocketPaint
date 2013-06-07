@@ -27,6 +27,10 @@
         #users {
             width: 200px;
         }
+        #mesaage{
+            height: 100px;
+            overflow-y: scroll;
+        }
     </style>
 </head>
 <body onselectstart="return false">
@@ -41,7 +45,13 @@
 
     </select>
 
-    <div id="messagebox"></div>
+    <div id="messagebox">
+        <div id="mesaage"></div>
+        <div id="messageinput">
+            <input type="text" id="msg"><input class="tj" type="button" value="提交">
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -50,6 +60,7 @@
             window.console.log = function () {
             }
         }
+
         var addNameToList = function (name) {
             var user = $("#users");
             $("<option value='" + name + "'>" + name + "</option>").appendTo(user);
@@ -91,7 +102,9 @@
                 ctx.stroke();
             }
         });
-
+        socket.on("msg", function(data){
+            $("#mesaage").html( $("#mesaage").html()+data+"<br/>");
+        });
         var canvas = document.getElementById('graph');
         var ctx = canvas.getContext('2d');
         ctx.fillStyle = "#222";
@@ -114,6 +127,13 @@
         $("#graph").on("mouseup", function (e) {
             begin = false;
         });
+
+        $(".tj").on("click",function(){
+            var msg=$("#msg").val();
+            socket.emit("msg",msg);
+            $("#mesaage").html( $("#mesaage").html()+"<span style='color: red'>您说:"+msg+"</span><br>");
+            var msg=$("#msg").val("");
+        })
     });
 
 </script>
