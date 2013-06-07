@@ -38,10 +38,10 @@ server.listen(app.get('port'), function () {
 });
 
 io.sockets.on('connection', function (socket) {
-    socket.emit('board cast', { hello:'world' });
+    socket.emit('draw', { hello:'world' });
     socket.on('draw', function (data) {
         console.log(data);
-        socket.broadcast.emit('board cast', data);
+        socket.broadcast.emit('draw', data);
     });
     socket.on('set nickname', function (name) {
         socket.set('nickname', name, function () {
@@ -53,6 +53,6 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on("msg", function(data){
-        socket.broadcast.emit("msg",socket.name+"说："+data);
+        socket.broadcast.emit("msg",socket.store.data.nickname+"说："+data);
     });
 });

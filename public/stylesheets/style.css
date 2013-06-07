@@ -1,8 +1,53 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    margin: 0 auto;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
+
+select{
+    border: 0px;
+    overflow: auto;
+}
+select:focus {
+    border: 0px;
+
+}
+#container{width: 800px;}
+#graph {
+    border: 1px solid #87ceeb;
+    cursor: url(../images/Pen.cur), auto;
+    float: left;
+}
+#graph:hover {
+
+    cursor: url(../images/Pen.cur), auto;
+
+}
+#userlist {
+    width: 200px;
+    height: 490px;
+    border: 1px solid #87ceeb;
+    float: left;
+    margin-left: 10px;;
+    padding: 5px 0;
+}
+
+#users {
+    width: 200px;
+}
+
+#message {
+    height: 100px;
+    overflow-y: auto;
+}
+
+#messagebox {
+    clear: both;
+    width: 712px;
+    border: 1px solid #87ceeb;
+}
+
