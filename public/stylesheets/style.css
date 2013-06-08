@@ -20,7 +20,7 @@ select:focus {
 #graph {
     border: 1px solid #87ceeb;
     cursor: url(../images/Pen.cur), auto;
-    float: left;
+
 }
 #graph:hover {
 
@@ -51,3 +51,24 @@ select:focus {
     border: 1px solid #87ceeb;
 }
 
+#drawCanvas{
+    float: left;
+}
+
+#drawCanvas #colorSelector{
+    width: 15px;
+    height: 15px;
+    background-color: #000;
+}
+.colorpicker input{
+    border: 0px;
+    border-color: transparent;
+   width: 50px;
+}
+.colorpicker input:focus,.colorpicker input:hover{
+    border: 0px;
+    border-color: transparent;
+    -webkit-box-shadow: 0
+    -moz-box-shadow: 0
+    box-shadow: 0
+}

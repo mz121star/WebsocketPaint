@@ -1,5 +1,5 @@
 (function ($, window) {
-var ctx;
+    var ctx;
     $.fn.MPaint = function (opts) {
         var opts = $.extend({}, $.fn.MPaint.defaults, opts), begin = false;
         var _moveTo = function (e) {
@@ -8,7 +8,7 @@ var ctx;
                 ctx.moveTo(e.offsetX, e.offsetY);
                 opts.drawReady(e);
             }
-            ,_drawBegin = function (e) {
+            , _drawBegin = function (e) {
                 if (begin) {
                     ctx.lineTo(e.offsetX, e.offsetY);
                     ctx.stroke();
@@ -36,25 +36,35 @@ var ctx;
         })
 
     };
-    $.fn.MPaint.SetColor=function(color){
-        ctx.strokeStyle = color;
-        console.log("change:"+color);
-    };
+    var Methods = {
+        SetColor:function (color) {
+            ctx.strokeStyle = color;
+        },
+        GetColor:function (color) {
+           return ctx.strokeStyle  ;
+        },
+        SetWidth:function(w){
+            ctx.lineWidth=w;
+        }
+    }
+
+
     $.fn.MPaint.defaults = {
-        BrushColor: "#fff",
-        BrushWidth: 5,
-        LineJoin: "round",
+        BrushColor:"#fff",
+        BrushWidth:5,
+        LineJoin:"round",
         //mousedown
-        drawReady: function (e) {
+        drawReady:function (e) {
 
         },
         //Mousemove
-        drawBegin: function (e) {
+        drawBegin:function (e) {
 
         },
         //mouseup
-        drawEnd: function (e) {
+        drawEnd:function (e) {
 
         }
     }
+     $.extend($.fn.MPaint,Methods);
 })(jQuery, window)
