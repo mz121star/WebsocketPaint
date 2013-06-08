@@ -34,7 +34,17 @@
         <div id="message"></div>
         <div id="messageinput">
             <form action="javascript:;">
-                <div class="input-append">
+                <div class="input-prepend">
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span>发送给...</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <ul><a href="#">私信</a></ul>
+                            <ul><a href="#">广播</a></ul>
+                        </ul>
+                    </div>
                     <input class="span4" id="msg" type="text">
                     <input class="btn tj" type="submit" value="send"/>
                 </div>
@@ -47,6 +57,7 @@
 <!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 <script src="js/jquery.mpaint.js"></script>
 <script   src="js/colorpicker.js"></script>
+<script   src="js/bootstrap.js"></script>
 <script>
     $(function () {
         if (window.console == 'undefined') {
@@ -121,7 +132,11 @@
 
         $(".tj").on("click", function () {
             var msg = $("#msg").val();
-            socket.emit("msg", msg);
+            var msgData={
+                id:$("#users option:selected").text(),
+                msg:msg
+            }
+            socket.emit("msg", msgData);
             $("#message").html($("#message").html() + "<span style='color: red'>您说:" + msg + "</span><br>");
             var m = $("#message")[0];
             m.scrollTop = m.scrollHeight

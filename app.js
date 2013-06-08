@@ -52,7 +52,12 @@ io.sockets.on('connection', function (socket) {
             //console.log(socket);
         });
     });
-    socket.on("msg", function(data){
-        socket.broadcast.emit("msg",socket.store.data.nickname+"说："+data);
+    socket.on("msg", function (data) {
+        if (data.id) {
+            io.sockets.socket(data.id).emit("msg", socket.store.data.nickname + "<span style='color: green'>对你说：</span>" + data.msg)
+        }
+        else {
+            socket.broadcast.emit("msg", socket.store.data.nickname + "对大家说：" + data.msg);
+        }
     });
 });
