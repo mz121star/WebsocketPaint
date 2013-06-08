@@ -56,8 +56,7 @@ select:focus {
 }
 
 #drawCanvas #colorSelector{
-    width: 15px;
-    height: 15px;
+
     background-color: #000;
 }
 .colorpicker input{

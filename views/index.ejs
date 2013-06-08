@@ -12,13 +12,16 @@
 
 </head>
 <body onselectstart="return false">
-<div id="container">
+<div id="container" >
     <div id="drawCanvas">
         <canvas id="graph" width="500" height="500">
             您的浏览器不支持,请使用chrome、firefox浏览器
         </canvas>
-     <div id="tools">
-         <div   id="colorSelector" ></div>
+     <div id="tools" >
+
+         <input type="button"  class="btn"   id="colorSelector" value="Color">
+         <input type="button"  class="btn"  value="SaveAs" id="saveas">
+
      </div>
     </div>
 
@@ -74,10 +77,12 @@
 
         });
         socket.on('draw', function (data) {
+
             var canvas = document.getElementById('graph');
             var ctx = canvas.getContext('2d');
             var ex, ey, e = data;
             ctx.fillStyle = "#222";
+            $("#graph").MPaint.SetColor(ctx.strokeStyle);
             ctx.strokeStyle = e.color||"#000";
             ctx.lineWidth = 5;
             ctx.lineJoin = "round";
@@ -143,6 +148,9 @@
                 $("#graph").MPaint.SetColor('#' + hex);
             }
         });
+        $('#saveas').on("click",function(){
+            $("#graph").MPaint.SaveImage();
+        })
     });
 
 

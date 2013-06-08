@@ -45,6 +45,10 @@
         },
         SetWidth:function(w){
             ctx.lineWidth=w;
+        },
+        SaveImage:function(){
+            var data =ctx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            window.location.href = data;
         }
     }
 
