@@ -3,16 +3,20 @@
     $.fn.MPaint = function (opts) {
         var opts = $.extend({}, $.fn.MPaint.defaults, opts), begin = false;
         var _moveTo = function (e) {
+                e.preventDefault();
+
+                var x= e.offsetX||e.changedTouches[0].clientX, y=e.offsetY||e.changedTouches[0].clientY;
                 begin = true;
                 ctx.beginPath();
-                ctx.moveTo(e.offsetX, e.offsetY);
-                opts.drawReady(e);
+                ctx.moveTo(x,y);
+                opts.drawReady({x:x,y:y});
             }
             , _drawBegin = function (e) {
                 if (begin) {
-                    ctx.lineTo(e.offsetX, e.offsetY);
+                    var x= e.offsetX||e.touches[0].clientX, y=e.offsetY||e.touches[0].clientY;
+                    ctx.lineTo(x, y);
                     ctx.stroke();
-                    opts.drawBegin(e);
+                    opts.drawBegin({x:x,y:y});
                 }
             }
             , _drawEnd = function (e) {
@@ -32,7 +36,9 @@
             canvas.on("mousedown", _moveTo);
             canvas.on("mousemove", _drawBegin);
             canvas.on("mouseup", _drawEnd);
-
+            canvas[0].addEventListener("touchstart", _moveTo,false);
+            canvas[0].addEventListener("touchmove", _drawBegin,false);
+            canvas[0].addEventListener("touchend", _drawEnd,false);
         })
 
     };
@@ -69,6 +75,6 @@
         drawEnd:function (e) {
 
         }
-    }
+    };
      $.extend($.fn.MPaint,Methods);
 })(jQuery, window)

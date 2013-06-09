@@ -119,11 +119,11 @@
         var snd = new Audio("images/pen.mp3"); // buffers automatically when created
         $("#graph").MPaint({
             drawReady: function (e) {
-                socket.emit('draw', { sx: e.offsetX, sy: e.offsetY,color: $("#graph").MPaint.GetColor() });
+                socket.emit('draw', { sx: e.x, sy: e.y,color: $("#graph").MPaint.GetColor() });
 
             },
             drawBegin: function (e) {
-                socket.emit('draw', { ex: e.offsetX, ey: e.offsetY,color: $("#graph").MPaint.GetColor() });
+                socket.emit('draw', { ex: e.x, ey: e.y,color: $("#graph").MPaint.GetColor() });
                 snd.play();
             },
             drawEnd: function (e) {
