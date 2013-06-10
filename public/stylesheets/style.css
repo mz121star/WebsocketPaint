@@ -53,6 +53,7 @@ select:focus {
 
 #drawCanvas{
     float: left;
+    width: 500px;
 }
 
 #drawCanvas #colorSelector{
@@ -70,4 +71,7 @@ select:focus {
     -webkit-box-shadow: 0
     -moz-box-shadow: 0
     box-shadow: 0
+}
+#tools{
+    float: left;
 }

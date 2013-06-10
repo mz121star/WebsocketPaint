@@ -17,11 +17,13 @@
         <canvas id="graph" width="500" height="500">
             您的浏览器不支持,请使用chrome、firefox浏览器
         </canvas>
-     <div id="tools" >
+     <div id="tools"  class="input-prepend" >
 
          <input type="button"  class="btn"   id="colorSelector" value="Color">
          <input type="button"  class="btn"  value="SaveAs" id="saveas">
-
+         <input type="button"  class="btn"  value="铅笔" id="pen">
+         <input type="button"  class="btn"  value="橡皮擦" id="eraser">
+         <input type="button"  class="btn"  value="清空" id="clearpaint">
      </div>
     </div>
 
@@ -166,7 +168,18 @@
         });
         $('#saveas').on("click",function(){
             $("#graph").MPaint.SaveImage();
-        })
+        });
+        $('#eraser').on("click",function(){
+            $("#graph").MPaint.Eraser();
+        });
+        $('#clearpaint').on("click",function(){
+            $("#graph").MPaint.Clear();
+        });
+        $('#pen').on("click",function(){
+            $("#graph").MPaint.Pen();
+        });
+
+
     });
 
 
