@@ -16,7 +16,7 @@ select:focus {
     border: 0px;
 
 }
-#container{width: 800px;}
+#container{width: 800px;margin-left: 200px;}
 #graph {
     border: 1px solid #87ceeb;
     cursor: url(../images/Pen.cur), auto;

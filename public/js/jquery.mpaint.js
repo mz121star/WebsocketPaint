@@ -2,18 +2,20 @@
     var ctx;
     $.fn.MPaint = function (opts) {
         var opts = $.extend({}, $.fn.MPaint.defaults, opts), begin = false;
-        var _moveTo = function (e) {
+        var _drawReady = function (e) {
                 e.preventDefault();
-
-                var x= e.offsetX||e.changedTouches[0].clientX, y=e.offsetY||e.changedTouches[0].clientY;
+               // var x= e.offsetX||e.changedTouches[0].clientX, y=e.offsetY||e.changedTouches[0].clientY;
+                var x= e.offsetX||e.touches[0].pageX+e.layerX, y=e.offsetY||e.touches[0].pageY+e.layerY;
                 begin = true;
                 ctx.beginPath();
                 ctx.moveTo(x,y);
                 opts.drawReady({x:x,y:y});
             }
             , _drawBegin = function (e) {
+                e.preventDefault();
+                e.cancelBubble=true;
                 if (begin) {
-                    var x= e.offsetX||e.touches[0].clientX, y=e.offsetY||e.touches[0].clientY;
+                    var x= e.offsetX||e.changedTouches[0].pageX+ e.layerX, y=e.offsetY||e.changedTouches[0].pageY+e.layerY;
                     ctx.lineTo(x, y);
                     ctx.stroke();
                     opts.drawBegin({x:x,y:y});
@@ -33,10 +35,10 @@
                 ctx.lineJoin = opts.LineJoin;
 
             }
-            canvas.on("mousedown", _moveTo);
+            canvas.on("mousedown", _drawReady);
             canvas.on("mousemove", _drawBegin);
             canvas.on("mouseup", _drawEnd);
-            canvas[0].addEventListener("touchstart", _moveTo,false);
+            canvas[0].addEventListener("touchstart", _drawReady,false);
             canvas[0].addEventListener("touchmove", _drawBegin,false);
             canvas[0].addEventListener("touchend", _drawEnd,false);
         })

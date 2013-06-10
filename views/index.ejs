@@ -54,10 +54,11 @@
 </div>
 <script src="js/jquery-1.10.0.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+
 <script src="js/jquery.mpaint.js"></script>
 <script   src="js/colorpicker.js"></script>
 <script   src="js/bootstrap.js"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 <script>
     $(function () {
         if (window.console == 'undefined') {
@@ -116,7 +117,7 @@
             var m = $("#message")[0];
             m.scrollTop = m.scrollHeight
         });
-        var snd = new Audio("images/pen.mp3"); // buffers automatically when created
+        //var snd = new Audio("images/pen.mp3"); // buffers automatically when created
         $("#graph").MPaint({
             drawReady: function (e) {
                 socket.emit('draw', { sx: e.x, sy: e.y,color: $("#graph").MPaint.GetColor() });
@@ -124,7 +125,7 @@
             },
             drawBegin: function (e) {
                 socket.emit('draw', { ex: e.x, ey: e.y,color: $("#graph").MPaint.GetColor() });
-                snd.play();
+                //snd.play();
             },
             drawEnd: function (e) {
             }
