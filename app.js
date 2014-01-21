@@ -43,14 +43,21 @@ io.sockets.on('connection', function (socket) {
         console.log(data);
         socket.broadcast.emit('draw', data);
     });
-    socket.on('set nickname', function (name) {
+    socket.on('set_nickname', function (name) {
         socket.set('nickname', name, function () {
 
             //socket.broadcast.emit('add user',socket.manager.roomClients);
-            socket.emit('add user', socket.manager.roomClients);
-            socket.broadcast.emit('add user', socket.manager.roomClients);
+            socket.emit('add_user', socket.manager.roomClients);
+            socket.broadcast.emit('add_user', socket.manager.roomClients);
             //console.log(socket);
         });
+    });
+    socket.on('check_nickname', function (name) {
+          for(var i= 0,l=socket.manager.roomClients.length;i<l;i++){
+              if(socket.manager.roomClients[i]===name){
+                  socket.emit('check_nickname',false);
+              }
+          }
     });
     socket.on("msg", function (data) {
         if (data.id) {

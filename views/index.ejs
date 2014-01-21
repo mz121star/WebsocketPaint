@@ -3,8 +3,13 @@
 <head>
     <title><%= title %></title>
 
+    <!-- 最新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+
+  <!--  <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>-->
     <link rel="stylesheet" media="screen" type="text/css" href="stylesheets/colorpicker.css" />
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -54,33 +59,71 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">请设置用户名</h4>
+            </div>
+            <div class="modal-body">
+               <input type="text" placeholder="用户名" id="username"  required=""/>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" id="gotoAPP">GO</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script src="js/jquery-1.10.0.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="js/jquery.mpaint.js"></script>
 <script   src="js/colorpicker.js"></script>
-<script   src="js/bootstrap.js"></script>
+
 <!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 <script>
     $(function () {
+
         if (window.console == 'undefined') {
             window.console.log = function () {
             }
         }
 
+        var socket = io.connect(window.location.origin);
+
         var addNameToList = function (name) {
             var user = $("#users");
             $("<option value='" + name + "'>" + name + "</option>").appendTo(user);
         }
-        var socket = io.connect(window.location.origin);
+
 
         socket.on('connect', function () {
-            var name = Math.random() * 1000;
-            socket.emit('set nickname', name);
+
+            $('#myModal').modal('show');
+
+            $("#gotoAPP").on("click",function(){
+                var name=$("#username").val();
+
+                console.log(name);
+                if(name){
+                    socket.emit('set_nickname', name);
+
+                }
+            })
+           // var name = Math.random() * 1000;
+              //socket.emit('set_nickname', name);
             //addNameToList(name);
 
-        })
-        socket.on('add user', function (names) {
+        });
+        socket.on('add_user', function (names) {
             var user = $("#users");
             user.html("");
             $.each(names, function (item) {
