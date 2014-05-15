@@ -4,10 +4,11 @@
     <title><%= title %></title>
 
     <!-- 最新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
 
-    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <!-- 可选的Bootstrap主题文件（一般不用引入）
+    <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
+    -->
 
   <!--  <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>-->
     <link rel="stylesheet" media="screen" type="text/css" href="stylesheets/colorpicker.css" />
@@ -71,8 +72,7 @@
                <input type="text" placeholder="用户名" id="username"  required=""/>
             </div>
             <div class="modal-footer">
-
-                <button type="button" class="btn btn-primary" id="gotoAPP">GO</button>
+                <button type="button" class="btn btn-primary" id="gotoAPP"  data-dismiss="modal">GO</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -82,11 +82,12 @@
 <script src="js/jquery-1.10.0.js"></script>
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="js/jquery.mpaint.js"></script>
-<script   src="js/colorpicker.js"></script>
+<script src="js/colorpicker.js"></script>
+<script src="js/utils.js"></script>
 
 <!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 <script>
@@ -126,10 +127,14 @@
         socket.on('add_user', function (names) {
             var user = $("#users");
             user.html("");
-            $.each(names, function (item) {
-                var name = item;
-                $("<option value='" + name + "'>" + name + "</option>").appendTo(user);
-            })
+//            $.each(names['data'], function (key, value) {
+//                $("<option value='" + key + "'>" + value + "</option>").appendTo(user);
+//            })
+            var hashMap = new utils.HashMap(names);
+            var keySet = hashMap.keySet();
+            for (var key in keySet) {
+                $("<option value='" + keySet[key] + "'>" + hashMap.get(keySet[key]) + "</option>").appendTo(user);
+            }
 
 
         });
@@ -179,7 +184,7 @@
         $(".tj").on("click", function () {
             var msg = $("#msg").val();
             var msgData={
-                id:$("#users option:selected").text(),
+                id:$("#users option:selected").val(),
                 msg:msg
             }
             socket.emit("msg", msgData);
