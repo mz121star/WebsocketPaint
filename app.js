@@ -6,7 +6,8 @@ var express = require('express')
     , routes = require('./routes')
     , user = require('./routes/user')
     , http = require('http')
-    , path = require('path');
+    , path = require('path')
+    , utils = require('./public/js/utils');
 
 var app = express();
 
@@ -37,6 +38,7 @@ server.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
+var socket_id_name_map = new utils.HashMap();
 io.sockets.on('connection', function (socket) {
     socket.emit('draw', { hello:'world' });
     socket.on('draw', function (data) {
@@ -44,11 +46,12 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('draw', data);
     });
     socket.on('set_nickname', function (name) {
+        socket_id_name_map.put(socket.id, name);
         socket.set('nickname', name, function () {
 
             //socket.broadcast.emit('add user',socket.manager.roomClients);
-            socket.emit('add_user', socket.manager.roomClients);
-            socket.broadcast.emit('add_user', socket.manager.roomClients);
+            socket.emit('add_user', socket_id_name_map);
+            socket.broadcast.emit('add_user', socket_id_name_map);
             //console.log(socket);
         });
     });
@@ -66,5 +69,9 @@ io.sockets.on('connection', function (socket) {
         else {
             socket.broadcast.emit("msg", socket.store.data.nickname + "对大家说：" + data.msg);
         }
+    });
+    socket.on('disconnect', function () {
+        socket_id_name_map.remove(socket.id);
+        socket.broadcast.emit('add_user', socket_id_name_map);
     });
 });
